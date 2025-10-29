@@ -1,0 +1,64 @@
+services:
+  mongo:
+    image: mongo:6
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    restart: unless-stopped
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  auth:
+    build: ./auth
+    ports:
+      - "3000:3000"
+    environment:
+      - MONGODB_AUTH_URI=mongodb://mongo:27017/auth
+      - JWT_SECRET=caominhtrung
+    depends_on:
+      - mongo
+
+  product:
+    build: ./product
+    ports:
+      - "3001:3001"
+    environment:
+      - MONGODB_PRODUCT_URI=mongodb://mongo:27017/products
+      - JWT_SECRET=caominhtrung
+      - RABBITMQ_URI=amqp://rabbitmq:5672
+    depends_on:
+      - mongo
+      - rabbitmq
+
+  order:
+    build: ./order
+    ports:
+      - "3002:3002"
+    environment:
+      - MONGODB_ORDER_URI=mongodb://mongo:27017/orders
+      - RABBITMQ_URI=amqp://rabbitmq:5672
+      - JWT_SECRET=caominhtrung
+    depends_on:
+      - mongo
+      - rabbitmq
+
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "3003:3003"
+    environment:
+      PORT: 3003
+    depends_on:
+      - auth
+      - product
+      - order
+
+volumes:
+  mongo-data:
+    name: eproject_mongo_data
