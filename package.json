@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mkdir -p test-results && mocha --timeout 20000 --recursive --exclude '**/node_modules/**' '**/*.test.js' --reporter mocha-junit-reporter --reporter-options output=./test-results/junit.xml --exit || echo 'No tests in root'"
+    "test": "mkdir -p test-results; mocha --timeout 20000 --recursive --exclude '**/node_modules/**' '**/*.test.js' --reporter mocha-junit-reporter --reporter-options output=./test-results/junit.xml --exit || true"
   },
   "keywords": [],
   "author": "",
