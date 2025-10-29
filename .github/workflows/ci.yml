@@ -72,7 +72,9 @@ jobs:
         with:
           name: test-logs
           path: |
-            ./test-results || ./auth/test-results || ./product/test-results || .
+            ./test-results/
+            ./auth/test-results/
+            ./product/test-results/
 
       - name: Tear down docker-compose services
         if: always()
