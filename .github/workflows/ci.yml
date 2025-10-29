@@ -52,7 +52,7 @@ jobs:
         run: docker compose up -d --build
 
       - name: Wait for services to be ready
-        run: npx wait-on tcp:27017 tcp:5672 tcp:3000 tcp:3001 --timeout 120000
+        run: npx wait-on tcp:27017 tcp:5672 tcp:3000 tcp:3001 --timeout 180000
 
       - name: Run root tests
         working-directory: ./
