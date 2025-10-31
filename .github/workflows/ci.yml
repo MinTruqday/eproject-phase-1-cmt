@@ -67,15 +67,26 @@ jobs:
         working-directory: ./product
         run: npm test || echo "No tests for product or tests failed"
 
+      - name: Show test result files (debug)
+        if: always()
+        run: |
+          echo "Listing root test-results"
+          ls -la ./test-results || true
+          echo "Listing auth test-results"
+          ls -la ./auth/test-results || true
+          echo "Listing product test-results"
+          ls -la ./product/test-results || true
+          echo "Searching for junit.xml files"
+          find . -type f -name 'junit.xml' -print || true
+
       - name: Upload test results (if any)
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: test-logs
           path: |
-            ./test-results/
-            ./auth/test-results/
-            ./product/test-results/
+            **/test-results/**
+            **/junit.xml
 
       - name: Tear down docker-compose services
         if: always()
